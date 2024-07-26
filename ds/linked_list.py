@@ -1,11 +1,11 @@
 from typing import Any, Optional
 
 
-class _Node:
+class _LinkedListNode:
     """
     A node in a linked list.
     """
-    def __init__(self, data: Any, next: Optional['_Node'] = None, prev: Optional['_Node'] = None) -> None:
+    def __init__(self, data: Any, next: Optional['_LinkedListNode'] = None, prev: Optional['_LinkedListNode'] = None) -> None:
         """
         Initialize a _Node object.
 
@@ -28,7 +28,7 @@ class LinkedList[T]:
     """
     def __init__(self, data: T = None):
         if data:
-            self.head = _Node(data)
+            self.head = _LinkedListNode(data)
             self.tail = self.head
         else:
             self.head = None
@@ -65,10 +65,10 @@ class LinkedList[T]:
 
     def add(self, data: T):
         if self.head is None:
-            self.head = _Node(data, None, None)
+            self.head = _LinkedListNode(data, None, None)
             self.tail = self.head
         else:
-            self.tail.next = _Node(data, None, self.tail)
+            self.tail.next = _LinkedListNode(data, None, self.tail)
             self.tail = self.tail.next
 
     def insert_at[int](self, data: T, index: int = 0):
@@ -82,18 +82,18 @@ class LinkedList[T]:
         if -1 > index > len(self):
             raise IndexError('Index out of range')
         if index == -1:
-            self.tail.next = _Node(data, None, self.tail)
+            self.tail.next = _LinkedListNode(data, None, self.tail)
             self.tail = self.tail.next
             return
         if index == 0:
-            self.head = _Node(data, self.head)
+            self.head = _LinkedListNode(data, self.head)
             return
         count = 0
         node = self.head
         while node:
             if count == index - 1:
                 temp = node.next
-                node.next = _Node(data, node.next, node)
+                node.next = _LinkedListNode(data, node.next, node)
                 node.next.prev = node
                 node.next.next = temp
                 temp.prev = node.next
@@ -101,7 +101,7 @@ class LinkedList[T]:
             count += 1
             node = node.next
 
-    def find(self, data: T) -> Optional['_Node']:
+    def find(self, data: T) -> Optional['_LinkedListNode']:
         node = self.head
         while node:
             if node.data == data:
