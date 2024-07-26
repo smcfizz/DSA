@@ -55,15 +55,21 @@ class LinkedList[T]:
         return count
 
     def __str__(self):
+        if self.head is None:
+            return '( Empty )'
         node = self.head
         nodes = []
         while node:
             nodes.append(str(node))
             node = node.next
-        nodes.append("None")
-        return " -> ".join(nodes)
+        return " <-> ".join(nodes)
 
     def add(self, data: T):
+        """
+        Add a node to the end of the list.
+        :param data:
+        :return:
+        """
         if self.head is None:
             self.head = _LinkedListNode(data, None, None)
             self.tail = self.head
@@ -115,22 +121,31 @@ class LinkedList[T]:
         :param index: The index of the node to remove. Defaults to 0. A value of -1 removes the last node.
         :raises IndexError: If the index is less than -1 or greater than or equal to the length of the list.
         """
+        if len(self) == 0:
+            raise IndexError('List is empty')
         if -1 > index >= len(self):
             raise IndexError('Index out of range')
         if index == -1:
-            self.tail = self.tail.prev
-            self.tail.next = None
-            return
+            val = self.tail.data
+            if len(self) == 1:
+                self.head = None
+                self.tail = None
+            else:
+                self.tail = self.tail.prev
+                self.tail.next = None
+            return val
         if index == 0:
+            val = self.head.data
             self.head = self.head.next
-            return
+            return val
         count = 0
         node = self.head
         while node:
             if count == index - 1:
+                val = node.next.data
                 node.next = node.next.next
                 node.next.prev = node
-                return
+                return val
             count += 1
             node = node.next
 
