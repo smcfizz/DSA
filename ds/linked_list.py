@@ -5,7 +5,7 @@ class _LinkedListNode:
     """
     A node in a linked list.
     """
-    def __init__(self, data: Any, next: Optional['_LinkedListNode'] = None, prev: Optional['_LinkedListNode'] = None) -> None:
+    def __init__(self, data: Any, next: Optional['_LinkedListNode'] = None, prev: Optional['_LinkedListNode'] = None):
         """
         Initialize a _Node object.
 
@@ -26,13 +26,9 @@ class LinkedList[T]:
     """
     A doubly linked list with generic type support.
     """
-    def __init__(self, data: T = None):
-        if data:
-            self.head = _LinkedListNode(data)
-            self.tail = self.head
-        else:
-            self.head = None
-            self.tail = None
+    def __init__(self):
+        self.head = None
+        self.tail = None
 
     def __iter__(self):
         node = self.head
