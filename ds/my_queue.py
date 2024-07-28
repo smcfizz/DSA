@@ -36,30 +36,70 @@ class ArrayQueue[T]:
         """
         self.queue = []
         self.front = 0
+        self.back = 0
+        self.size = 0
+
+    def _reset_pointers(self):
+        self.front = 0
+        self.back = 0
+
+    def _resize_queue(self):
+        new_length = len(self.queue) * 2 if len(self.queue) > 0 else 1
+        new_queue = [None] * new_length
+        for i, n in enumerate(self.queue):
+            new_queue[i] = n
+        self.queue = new_queue
+
+    def _shift_to_front(self):
+        for old_position in range(self.front, self.back):
+            new_position = old_position - self.front
+            self.queue[new_position] = self.queue[old_position]
+            self.queue[old_position] = None
+
+        self.back -= self.front
+        self.front = 0
+
+    def _clean_queue(self):
+        """
+        Shift all values in queue forward to the front of the internal array
+        to ensure space is being used efficiently, then expand the queue if necessary.
+        :return:
+        """
+        if self.front != 0:
+            self._shift_to_front()
+        if self.size == len(self.queue):
+            self._resize_queue()
 
     def enqueue(self, data: T):
-        # First, resize our array if we are out of room
-        if self.front == len(self.queue):
-            new_length = len(self.queue) * 2 if len(self.queue) > 0 else 1
-            new_queue = [None] * new_length
-            for i, n in enumerate(self.queue):
-                new_queue[i] = n
-            self.queue = new_queue
-
-        self.queue[self.front] = data
-        self.front += 1
+        self._clean_queue()
+        self.queue[self.back] = data
+        self.back += 1
+        self.size += 1
 
     def dequeue(self) -> T:
-        if (self.front - 1) < 0:
+        if (self.back - 1) < 0 or self.front == self.back:
+            self._reset_pointers()
             raise IndexError('Queue is empty')
 
-        self.front -= 1
         val = self.queue[self.front]
         self.queue[self.front] = None
+        self.front += 1
+        self.size -= 1
         return val
 
+    def is_empty(self) -> bool:
+        return self.size == 0
+
+    def peek(self) -> T | None:
+        if self.is_empty():
+            return None
+        return self.queue[self.back - 1]
+
+    def size(self) -> int:
+        return self.size
+
     def __str__(self):
-        return f'{str(self.queue)}\nfront: {self.front}'
+        return f'{str(self.queue)}\nfront: {self.front}, back: {self.back}'
 
 
 if __name__ == '__main__':
@@ -90,6 +130,8 @@ if __name__ == '__main__':
     arrqueue.enqueue(1)
     arrqueue.enqueue(2)
     arrqueue.enqueue(3)
+    arrqueue.enqueue(4)
+    arrqueue.enqueue(5)
     print(arrqueue)
 
     # Pop from the queue
@@ -97,6 +139,11 @@ if __name__ == '__main__':
     print('Popped: ', arrqueue.dequeue())
     print('Popped: ', arrqueue.dequeue())
     print(arrqueue)
+    arrqueue.enqueue(6)
+    print(arrqueue)
+    print('Popped: ', arrqueue.dequeue())
+    print('Popped: ', arrqueue.dequeue())
+    print('Popped: ', arrqueue.dequeue())
 
     # Pop from an empty queue
     try:
