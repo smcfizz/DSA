@@ -13,6 +13,20 @@ class HashMap:
         self.map: [Tuple[Any, Any] | None] = [None]
         self.num_entries = 0
 
+    def __contains__(self, key) -> bool:
+        try:
+            self.__getitem__(key)
+            return True
+        except KeyError:
+            return False
+
+    def __iter__(self):
+        for i in self.map:
+            if i is not None:
+                yield i[0]
+            else:
+                continue
+
     def __getitem__(self, key):
         hash_val = self._hash(key)
 
@@ -21,7 +35,9 @@ class HashMap:
                 return self.map[hash_val][1]
             hash_val += 1
 
-    def __setitem__(self, key, value):
+        raise KeyError(str(key))
+
+    def __setitem__(self, key, value, rehash=True):
         hash_val: int = self._hash(key)
 
         # Handle overwrites first
@@ -37,7 +53,8 @@ class HashMap:
         self.map[hash_val] = (key, value)
         self.num_entries += 1
 
-        self._rehash()
+        if rehash:
+            self._rehash()
 
     def __delitem__(self, key):
         hash_val = self._hash(key)
@@ -54,7 +71,7 @@ class HashMap:
         def transfer_map(old_map):
             for value in old_map:
                 if value is not None:
-                    self.__setitem__(value[0], value[1])
+                    self.__setitem__(value[0], value[1], rehash=False)
             self._rehash()
 
         if self._load_factor > 0.75:
@@ -81,7 +98,7 @@ class HashMap:
         return self.num_entries / len(self.map) if self.num_entries > 0 else 0
 
     def __str__(self):
-        return f'num_entries: {self.num_entries}\n' + '\n'.join([f'{v[0]}\t|\t{v[1]}' if v is not None else 'None\t|\tNone' for v in self.map]) + '\n'
+        return '\n'.join([f'{v[0]}\t|\t{v[1]}' for v in self.map if v is not None]) + '\n'
 
 
 if __name__ == '__main__':
@@ -94,6 +111,14 @@ if __name__ == '__main__':
     hmap[6512] = 'fizzbuzz'
     hmap[('apple', 'orange', 'banana')] = {'jane': 1234567, 'john': 9876543}
     print('HashMap:\n', hmap)
+
+    print('True' if 'a' in hmap else 'False')
+    print(hmap['a'])
+    try:
+        print(hmap['d'])
+    except KeyError as e:
+        print(f'No key {e} in map')
+    print()
 
     # Overwrite a value
     hmap['a'] = 'Hello world'
