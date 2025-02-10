@@ -1,8 +1,8 @@
-class TreeNode[T]:
+class TreeNode:
     """
     A simple n-ary tree node
     """
-    def __init__(self, val: T):
+    def __init__(self, val):
         self.val = val
         self.children = []
         self.parent = None
