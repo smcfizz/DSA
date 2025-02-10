@@ -8,10 +8,6 @@ class NotFoundException(Exception):
 
 
 class _TreeNode:
-    class _Child:
-        LEFT = 0
-        RIGHT = 1
-
     def __init__(self, val: Any, left: Optional['_TreeNode'] | None = None, right: Optional['_TreeNode'] = None):
         self.val = val
         self.count = 1  # To handle duplicates
