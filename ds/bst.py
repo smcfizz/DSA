@@ -65,6 +65,7 @@ class BinarySearchTree[T]:
     def __str__(self):
         return str(self._level_order())
 
+    # AKA Breadth First Search
     def _level_order(self) -> [T]:
         if self.is_empty():
             return []

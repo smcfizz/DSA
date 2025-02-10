@@ -7,7 +7,7 @@ class LinkedListStack[T]:
     """
     A stack implemented with a linked list.
 
-    Here I am simply reusing the LinkedList I already implemented.
+    Here I am simply reusing the LinkedList I have already implemented.
     """
     def __init__(self):
         self.stack = LinkedList[T]()

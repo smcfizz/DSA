@@ -5,8 +5,8 @@ class LinkedListQueue[T]:
     """
     A queue implemented with a linked list.
 
-    Maybe it's somewhat cheating, but I already
-    implemented a LinkedList, so I'm going to use it here.
+    Maybe it's somewhat cheating, but I've already
+    implemented a LinkedList, so I will use it here.
     """
     def __init__(self):
         self.queue = LinkedList[T]()

@@ -3,7 +3,7 @@ from ds.hash_map import HashMap
 
 class Graph[T]:
     """
-    A graph implemented via a hash table representing an adjacency list.
+    An undirected graph implemented via a hash table representing an adjacency list.
 
     This implementation provides `O(1)` time for nearly all supported methods (amortized in some cases):
         - Add vertex
