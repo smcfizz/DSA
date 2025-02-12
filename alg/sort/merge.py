@@ -2,6 +2,12 @@ from typing import List
 
 
 def merge_sort(nums: List) -> List:
+    '''
+    Time complexity:    O(n log n)
+    Space complexity:   O(n)
+    Element moves:      O(n log n) on average
+    Stable:             Yes
+    '''
     def merge(left, right):
         merged = []
         left_idx, right_idx = 0, 0
