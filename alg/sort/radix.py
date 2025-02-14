@@ -14,7 +14,7 @@ def radix_sort(arr: list[int]) -> list[int]:
     nums = arr.copy()
     for i in range(1, max_digits + 1):
         for num in nums:
-            bucket = (num % 10 ** i) // 10 ** (i - 1)
+            bucket = (num % 10 ** i) // 10 ** (i - 1) # isolate the value at the digit we are sorting on
             buckets[bucket].append(num)
             nums = []
 
