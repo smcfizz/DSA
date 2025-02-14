@@ -1,7 +1,4 @@
-from typing import List
-
-
-def insertion_sort(arr: list[int]) -> List:
+def insertion_sort(arr: list[int]) -> list[int]:
     '''
     Time complexity:    O(n^2)
     Space complexity:   O(1)

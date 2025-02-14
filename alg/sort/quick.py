@@ -1,7 +1,4 @@
-from typing import List
-
-
-def quicksort(arr: list[int]) -> List:
+def quicksort(arr: list[int]) -> list[int]:
     '''
     Time complexity:    O(n log n)
     Space complexity:   O(log n)

@@ -1,7 +1,4 @@
-from typing import List
-
-
-def merge_sort(nums: List) -> List:
+def merge_sort(nums: list[int]) -> list[int]:
     '''
     Time complexity:    O(n log n)
     Space complexity:   O(n)
