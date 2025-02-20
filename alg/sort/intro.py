@@ -3,6 +3,9 @@ from insertion import insertion_sort
 from heap import heapsort
 
 def introspective_sort(arr: list[int]) -> list[int]:
+    """
+    Time complexity:    O(n log n) on average
+    """
     def introsort(arr: list[int], maxdepth: int) -> list[int]:
         if len(arr) < 5: # can be tuned based on input array
             return insertion_sort(arr)

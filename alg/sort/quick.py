@@ -1,10 +1,10 @@
 def quicksort(arr: list[int]) -> list[int]:
-    '''
+    """
     Time complexity:    O(n log n)
     Space complexity:   O(log n)
     Swaps:              O(n log n) on average
     Stable:             Yes
-    '''
+    """
     if len(arr) < 2:
         return arr
     

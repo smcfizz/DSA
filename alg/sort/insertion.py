@@ -1,10 +1,10 @@
 def insertion_sort(arr: list[int]) -> list[int]:
-    '''
+    """
     Time complexity:    O(n^2)
     Space complexity:   O(1)
     Swaps:              O(n^2)
     Stable:             Yes
-    '''
+    """
     for i in range(len(arr)):
         j = i
         while j > 0 and arr[j] < arr[j - 1]:

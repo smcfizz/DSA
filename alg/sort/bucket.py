@@ -2,12 +2,12 @@ from insertion import insertion_sort
 
 
 def bucket_sort(arr: list[int], use_insertion_sort=True) -> list[int]:
-    '''
+    """
     Time complexity:    O(n) average, since # buckets == arr size, O(n^2/k) otherwise
     Space complexity:   O(n + k)
     Swaps:              O(n log n)
     Stable:             No
-    '''
+    """
     if len(arr) < 2:
         return arr
     

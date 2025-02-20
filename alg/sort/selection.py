@@ -1,10 +1,10 @@
 def selection_sort(arr: list[int]) -> list[int]:
-    '''
+    """
     Time complexity:    O(n^2)
     Space complexity:   O(1)
     Swaps:              O(n) on average
     Stable:             Yes
-    '''
+    """
     for i in range(len(arr)):
         min_idx = i
         for j in range(i + 1, len(arr)):

@@ -1,10 +1,10 @@
 def heapsort(arr: list[int]) -> list[int]:
-    '''
+    """
     Time complexity:    O(n log n)
     Space complexity:   O(n)
     Swaps:              O(n log n)
     Stable:             No
-    '''
+    """
     def min_heapify(idx: int):
         size = len(arr)
         new_idx = idx

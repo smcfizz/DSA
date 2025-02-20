@@ -2,12 +2,12 @@ import math
 
 
 def radix_sort(arr: list[int]) -> list[int]:
-    '''
+    """
     Time complexity:    O(n * k) average, where n is len of arr and k is num buckets
     Space complexity:   O(n + k)
     Moves:              O(n log n)
     Stable:             Yes
-    '''
+    """
     buckets = [[] for i in range(len(arr))]
     max_digits = math.floor(math.log(max(arr), 10)) + 1
 

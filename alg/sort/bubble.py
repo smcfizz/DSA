@@ -1,10 +1,10 @@
 def bubble_sort(arr: list[int]) -> list[int]:
-    '''
+    """
     Time complexity:    O(n^2)
     Space complexity:   O(1)
     Swaps:              O(n^2)
     Stable:             Yes
-    '''
+    """
     for i in range(len(arr)):
         for j in range(len(arr) - i - 1):
             if arr[j] > arr[j + 1]:

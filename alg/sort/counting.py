@@ -2,12 +2,12 @@ from collections import defaultdict
 
 
 def counting_sort(nums: list[int]) -> list[int]:
-    '''
+    """
     Time complexity:    O(n + k) average
     Space complexity:   O(n + k)
     Moves:              O(n)
     Stable:             Yes
-    '''
+    """
     count = defaultdict(int)
     res = [0] * len(nums)
 
