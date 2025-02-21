@@ -15,11 +15,10 @@ def union_find(graph: Graph[int]) -> bool:
     ds = DisjointSet()
     ds.make_set(graph.nodes())
 
-    for node in graph.nodes():
-        for neighbor in graph.neighbors(node):
-            if ds.find(node) == ds.find(neighbor):
-                return True
-            ds.union(node, neighbor)
+    for v1, v2, _ in graph.edges():
+        if ds.find(v1) == ds.find(v2):
+            return True
+        ds.union(v1, v2)
 
     return False
 
