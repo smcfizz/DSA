@@ -1,6 +1,7 @@
 from ds.graph import Graph
 from alg.union_find import union_find
 
+
 def kruskal(graph: Graph[int]) -> Graph[int]:
     """
     Kruskal's algorithm for finding the minimum spanning tree of a graph.
@@ -51,7 +52,7 @@ if __name__ == '__main__':
     graph.add_edge(4, 5, 8)
     graph.add_edge(4, 6, 9)
     graph.add_edge(5, 6, 11)
-    # Image of graph at:
+    # Image of graph:
     # https://i0.wp.com/www.techiedelight.com/wp-content/uploads/2016/11/Kruskal-1.png?resize=467%2C300&ssl=1
 
     print(kruskal(graph))
