@@ -100,6 +100,9 @@ class HashMap:
     def __str__(self):
         return '\n'.join([f'{v[0]}\t|\t{v[1]}' for v in self.map if v is not None]) + '\n'
 
+    def keys(self) -> [Any]:
+        return [v[0] for v in self.map if v is not None]
+
 
 if __name__ == '__main__':
     # Construct a hash map

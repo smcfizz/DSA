@@ -77,6 +77,9 @@ class Graph[T]:
     def adjacent(self, first: T, second: T) -> bool:
         return second in self.neighbors(first)
 
+    def nodes(self) -> [T]:
+        return self._adjacency_list.keys()
+
 
 if __name__ == '__main__':
     graph = Graph[int]()
