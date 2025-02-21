@@ -85,6 +85,17 @@ class _Heap[T]:
         self._sift_down(0)
         return old_val
 
+    def update_value(self, value: T, new_priority: int|float|str):
+        pos = None
+        for i in range(len(self.heap)):
+            if self.heap[i][0] == value:
+                pos = i
+        if pos is None:
+            raise ValueError(f'Value \'{value}\' not found in heap.')
+        self.heap[pos] = (value, new_priority)
+        self._sift_up(pos)
+        self._sift_down(pos)
+
     def size(self) -> int:
         return len(self.heap)
 
