@@ -3,7 +3,7 @@ from ds.hash_map import HashMap
 
 class Graph[T]:
     """
-    An undirected graph implemented via a hash table representing an adjacency list.
+    An optionally-directed, optionally-weighted graph implemented via a hash table representing an adjacency list.
 
     This implementation provides `O(1)` time for nearly all supported methods (amortized in some cases):
         - Add vertex
@@ -30,13 +30,13 @@ class Graph[T]:
         return wrapper
 
     def _validate_nodes(self, nodes: [T]):
-        for node in nodes:
+        for node in nodes[:2]:
             if node not in self._adjacency_list:
                 raise KeyError(f'Value \'{node}\' not present in graph.')
 
     def add_vertex(self, value: T):
         if value not in self._adjacency_list:
-            self._adjacency_list[value] = set()
+            self._adjacency_list[value] = dict()
 
     @_validate
     def remove_vertex(self, value: T):
@@ -44,41 +44,69 @@ class Graph[T]:
 
         for key in self._adjacency_list:
             if value in self._adjacency_list[key]:
-                self._adjacency_list[key].remove(value)
+                del self._adjacency_list[key][value]
 
     @_validate
-    def add_edge(self, start: T, end: T):
+    def add_edge(self, start: T, end: T, weight: int = 0):
+        """
+        Add an edge from `start` to `end` with optional weight `weight`.
+
+        Self-referential edges are disallowed.
+        :param start: The source node of the edge. Must already be present in the graph.
+        :param end: The sink node of the edge. Must already be present in the graph.
+        :param weight: An integer value representing the weight of the edge.
+        :return: None
+        """
         # Disallow self-referential edges
         if start == end:
             return
 
-        self._adjacency_list[start].add(end)
+        self._adjacency_list[start][end] = weight
 
         # Only add edge one way if graph is a directed graph
         if self._directed:
             return
 
-        self._adjacency_list[end].add(start)
+        self._adjacency_list[end][start] = weight
 
     @_validate
     def remove_edge(self, start: T, end: T):
-        self._adjacency_list[start].remove(end)
+        del self._adjacency_list[start][end]
 
         if self._directed:
             return
 
-        self._adjacency_list[end].remove(start)
+        del self._adjacency_list[end][start]
 
     @_validate
-    def neighbors(self, value: T) -> [T]:
-        return self._adjacency_list[value]
+    def neighbors(self, value: T) -> [(T, int)]:
+        """
+        Get all the neighbors (node, weight) of the node `value`.
+        :param value: A value in the graph
+        :return: A list of tuples representing the neighbors of `value` and the weights of their edges
+        """
+        return [(key, val) for key, val in self._adjacency_list[value].items()]
 
     @_validate
-    def adjacent(self, first: T, second: T) -> bool:
-        return second in self.neighbors(first)
+    def is_adjacent(self, first: T, second: T) -> bool:
+        return second in self._adjacency_list[first]
 
     def nodes(self) -> [T]:
         return self._adjacency_list.keys()
+
+    def edges(self) -> [(T, T, int)]:
+        """
+        Get all the edges of the graph along with their corresponding weights.
+
+        Undirected graphs do not return duplicate edges. E.g. an edge from vertex 1 to vertex 2 with weight 5) will not
+        return edges `(1, 2, 5)` and `(2, 1, 5)`, only the former.
+        :return: A list of tuples `(v1, v2, weight)` representing the edges of the graph and their weights
+        """
+        edges = set()
+        for node in self._adjacency_list:
+            for neighbor in self.neighbors(node):
+                edges.add((min(node, neighbor[0]), max(node, neighbor[0]), neighbor[1]))
+        return list(edges)
 
 
 if __name__ == '__main__':
@@ -102,7 +130,7 @@ if __name__ == '__main__':
 
     print('Neighbors of node 2: ', str(graph.neighbors(2)))
 
-    print('Is 2 adjacent to 3: ', str(graph.adjacent(2, 3)))
+    print('Is 2 adjacent to 3: ', str(graph.is_adjacent(2, 3)))
 
     print(graph)
 
