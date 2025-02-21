@@ -11,11 +11,34 @@ class _Heap[T]:
         - Delete/remove max: `O(log n)`
         - Insert: `O(log n)`
     """
-    def __init__(self):
+    def __init__(self, key: callable = lambda x: x[1]):
+        self.key = key
         self.heap = []
+
+    def __contains__(self, item):
+        for value, _ in self.heap:
+            if value == item:
+                return True
+        return False
 
     def __str__(self):
         return str(self.heap)
+
+    # TODO: Add some sort of validation in case user tries to use values that cannot be compared
+    # @staticmethod
+    # def _validate(params: list[int]):
+    #     def decorator(func):
+    #         def wrapper(self, *args):
+    #             self._validate_value([*args], params)
+    #             return func(self, *args)
+    #         return wrapper
+    #     return decorator
+    #
+    # @staticmethod
+    # def _validate_value(values, params_to_check):
+    #     for pos in params_to_check:
+    #         val = values[pos]
+    #         raise TypeError('Parameter must be of type Comparable.') if not None and not isinstance(val, Comparable) else None
 
     def _sift_up(self, current_pos):
         raise NotImplementedError('Method must be overridden by child class.')
@@ -23,13 +46,16 @@ class _Heap[T]:
     def _sift_down(self, current_pos):
         raise NotImplementedError('Method must be overridden by child class.')
 
-    def parent_pos(self, child_pos: int) -> int:
+    @staticmethod
+    def parent_pos(child_pos: int) -> int:
         return child_pos // 2
 
-    def left_child_pos(self, parent_pos: int) -> int:
+    @staticmethod
+    def left_child_pos(parent_pos: int) -> int:
         return parent_pos * 2 + 1
 
-    def right_child_pos(self, parent_pos: int) -> int:
+    @staticmethod
+    def right_child_pos(parent_pos: int) -> int:
         return parent_pos * 2 + 2
 
     def is_leaf(self, pos):
@@ -38,20 +64,20 @@ class _Heap[T]:
     def swap(self, child_pos: int, parent_pos: int):
         self.heap[child_pos], self.heap[parent_pos] = self.heap[parent_pos], self.heap[child_pos]
 
-    def push(self, value: T):
-        self.heap.append(value)
+    def push(self, value: T, priority: int|float|str = None):
+        self.heap.append((value, value if priority is None else priority))
         current_pos = self.size() - 1
         self._sift_up(current_pos)
 
     def pop(self) -> T:
-        val = self.heap.pop(0)
+        val = self.heap.pop(0)[0]
         if not self.is_empty():
             self.heap.insert(0, self.heap.pop())
         self._sift_down(0)
         return val
 
     def peek(self) -> T:
-        return self.heap[0]
+        return self.heap[0][0]
 
     def replace(self, value: T) -> T:
         old_val = self.heap.pop(0)
@@ -67,13 +93,13 @@ class _Heap[T]:
 
 
 class MinHeap[T](_Heap):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, key: callable = lambda x: x[1]):
+        super().__init__(key=key)
 
     def _sift_up(self, current_pos):
         parent_pos = self.parent_pos(current_pos)
 
-        while self.heap[current_pos] < self.heap[parent_pos]:
+        while self.key(self.heap[current_pos]) < self.key(self.heap[parent_pos]):
             self.swap(current_pos, parent_pos)
             current_pos = self.parent_pos(current_pos)
             parent_pos = self.parent_pos(current_pos)
@@ -85,9 +111,9 @@ class MinHeap[T](_Heap):
         left_child_pos = self.left_child_pos(current_pos)
         right_child_pos = self.right_child_pos(current_pos)
 
-        current_value = self.heap[current_pos]
-        left_child_value = self.heap[left_child_pos] if left_child_pos < self.size() else float('inf')
-        right_child_value = self.heap[right_child_pos] if right_child_pos < self.size() else float('inf')
+        current_value = self.key(self.heap[current_pos])
+        left_child_value = self.key(self.heap[left_child_pos]) if left_child_pos < self.size() else float('inf')
+        right_child_value = self.key(self.heap[right_child_pos]) if right_child_pos < self.size() else float('inf')
 
         if current_value > left_child_value or current_value > right_child_value:
             # Swap with whichever child is smaller
@@ -100,13 +126,13 @@ class MinHeap[T](_Heap):
 
 
 class MaxHeap[T](_Heap):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, key: callable = lambda x: x[1]):
+        super().__init__(key=key)
 
     def _sift_up(self, current_pos):
         parent_pos = self.parent_pos(current_pos)
 
-        while self.heap[current_pos] > self.heap[parent_pos]:
+        while self.key(self.heap[current_pos]) > self.key(self.heap[parent_pos]):
             self.swap(current_pos, parent_pos)
             current_pos = self.parent_pos(current_pos)
             parent_pos = self.parent_pos(current_pos)
@@ -118,9 +144,9 @@ class MaxHeap[T](_Heap):
         left_child_pos = self.left_child_pos(current_pos)
         right_child_pos = self.right_child_pos(current_pos)
 
-        current_value = self.heap[current_pos]
-        left_child_value = self.heap[left_child_pos] if left_child_pos < self.size() else float('-inf')
-        right_child_value = self.heap[right_child_pos] if right_child_pos < self.size() else float('-inf')
+        current_value = self.key(self.heap[current_pos])
+        left_child_value = self.key(self.heap[left_child_pos]) if left_child_pos < self.size() else float('-inf')
+        right_child_value = self.key(self.heap[right_child_pos]) if right_child_pos < self.size() else float('-inf')
 
         if current_value < left_child_value or current_value < right_child_value:
             # Swap with whichever child is larger
@@ -162,3 +188,14 @@ if __name__ == '__main__':
     for i in range(10):
         print(str(maxheap.pop()) + '... ', end='')
     print()
+
+    minheap = MinHeap()
+    minheap.push('A', 3)
+    minheap.push('B', 1)
+    minheap.push('C', 0)
+    minheap.push('D', 2)
+    print(minheap)
+    minheap.update_value('D', 4)
+    print(minheap)
+    while not minheap.is_empty():
+        print(minheap.pop())
