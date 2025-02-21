@@ -30,12 +30,17 @@ class HashMap:
     def __getitem__(self, key):
         hash_val = self._hash(key)
 
-        while self.map[hash_val] is not None:
-            if self.map[hash_val][0] == key:
-                return self.map[hash_val][1]
-            hash_val += 1
+        try:
+            while self.map[hash_val] is not None:
+                if self.map[hash_val][0] == key:
+                    return self.map[hash_val][1]
+                hash_val += 1
+                if hash_val >= len(self.map):
+                    hash_val = 0
 
-        raise KeyError(str(key))
+            raise KeyError(str(key))
+        except IndexError:
+            print(f'Hashing error occurred for key {key} with value {hash_val}')
 
     def __setitem__(self, key, value, rehash=True):
         hash_val: int = self._hash(key)
