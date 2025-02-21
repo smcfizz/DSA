@@ -19,6 +19,9 @@ class Graph[T]:
         self._adjacency_list = HashMap()
         self._directed = directed
 
+    def __contains__(self, item):
+        return item in self._adjacency_list
+
     def __str__(self):
         return str(self._adjacency_list)
 
@@ -47,7 +50,7 @@ class Graph[T]:
                 del self._adjacency_list[key][value]
 
     @_validate
-    def add_edge(self, start: T, end: T, weight: int = 0):
+    def add_edge(self, start: T, end: T, weight: int|None = None):
         """
         Add an edge from `start` to `end` with optional weight `weight`.
 
